@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liquid Portfolio</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #080b18;
+        color: white;
+        overflow-x: hidden;
+    }
+
+    /* =========================
+       LIQUID BACKGROUND
+    ========================== */
+
+    .background {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        z-index: -2;
+        background:
+            radial-gradient(circle at 20% 20%, #32145f 0%, transparent 35%),
+            radial-gradient(circle at 80% 80%, #073b66 0%, transparent 35%),
+            #080b18;
+    }
+
+    .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.7;
+        animation: float 12s infinite alternate ease-in-out;
+    }
+
+    .blob1 {
+        width: 350px;
+        height: 350px;
+        background: #ff3cac;
+        top: 5%;
+        left: 5%;
+    }
+
+    .blob2 {
+        width: 300px;
+        height: 300px;
+        background: #784ba0;
+        right: 5%;
+        top: 25%;
+        animation-delay: -3s;
+    }
+
+    .blob3 {
+        width: 400px;
+        height: 400px;
+        background: #00c6ff;
+        bottom: -10%;
+        left: 30%;
+        animation-delay: -6s;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
+
+        50% {
+            transform: translate(80px, -50px) scale(1.15);
+        }
+
+        100% {
+            transform: translate(-60px, 80px) scale(0.9);
+        }
+    }
+
+    /* =========================
+       NAVBAR
+    ========================== */
+
+    nav {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(1100px, 90%);
+        padding: 15px 25px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50px;
+
+        z-index: 100;
+    }
+
+    .logo {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .logo span {
+        color: #ff65c3;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+    }
+
+    nav a {
+        color: #ddd;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    nav a:hover {
+        color: white;
+    }
+
+    /* =========================
+       GENERAL
+    ========================== */
+
+    section {
+        width: min(1100px, 90%);
+        margin: auto;
+        padding: 120px 0;
+    }
+
+    /* =========================
+       HERO
+    ========================== */
+
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 800px;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 50px;
+
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    .hero h1 {
+        font-size: clamp(55px, 10vw, 110px);
+        line-height: 0.95;
+        margin-bottom: 25px;
+
+        background: linear-gradient(
+            120deg,
+            #ffffff,
+            #ff70c8,
+            #65d9ff
+        );
+
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .hero p {
+        color: #bbb;
+        font-size: 18px;
+        line-height: 1.7;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .buttons {
+        margin-top: 35px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        text-decoration: none;
+        color: white;
+        padding: 14px 25px;
+        border-radius: 50px;
+
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+
+        transition: 0.3s;
+    }
+
+    .btn.primary {
+        background: linear-gradient(90deg, #ff3cac, #784ba0);
+        border: none;
+    }
+
+    .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
+
+    /* =========================
+       SECTION TITLE
+    ========================== */
+
+    .section-title {
+        margin-bottom: 50px;
+    }
+
+    .section-title small {
+        color: #ff65c3;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    .section-title h2 {
+        font-size: 50px;
+        margin-top: 10px;
+    }
+
+    /* =========================
+       ABOUT
+    ========================== */
+
+    .about {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .about-text p {
+        color: #aaa;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+
+    .liquid-card {
+        padding: 35px;
+        border-radius: 35px;
+
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border: 1px solid rgba(255,255,255,0.13);
+
+        box-shadow:
+            inset 0 1px rgba(255,255,255,0.1),
+            0 30px 80px rgba(0,0,0,0.25);
+
+        transition: 0.4s;
+    }
+
+    .liquid-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255,255,255,0.3);
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .stat {
+        padding: 25px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.06);
+    }
+
+    .stat h3 {
+        font-size: 35px;
+        color: #ff65c3;
+    }
+
+    .stat p {
+        color: #999;
+        margin-top: 5px;
+    }
+
+    /* =========================
+       SKILLS
+    ========================== */
+
+    .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .skill {
+        padding: 14px 22px;
+        border-radius: 50px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #ddd;
+        transition: 0.3s;
+    }
+
+    .skill:hover {
+        transform: scale(1.08);
+        background: rgba(255,255,255,0.15);
+    }
+
+    /* =========================
+       PROJECTS
+    ========================== */
+
+    .projects {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .project {
+        position: relative;
+        min-height: 320px;
+        padding: 30px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        overflow: hidden;
+        border-radius: 35px;
+
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(20px);
+
+        border: 1px solid rgba(255,255,255,0.12);
+
+        transition: 0.4s;
+    }
+
+    .project::before {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: #ff3cac;
+        filter: blur(60px);
+        top: -70px;
+        right: -50px;
+        opacity: 0.6;
+    }
+
+    .project:nth-child(2)::before {
+        background: #00c6ff;
+    }
+
+    .project:nth-child(3)::before {
+        background: #8f5cff;
+    }
+
+    .project:hover {
+        transform: translateY(-12px) rotate(-1deg);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    }
+
+    .project-number {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        color: rgba(255,255,255,0.4);
+        font-size: 14px;
+    }
+
+    .project h3 {
+        font-size: 28px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .project p {
+        color: #aaa;
+        line-height: 1.6;
+        position: relative;
+    }
+
+    .project-tags {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .project-tags span {
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.1);
+        font-size: 11px;
+    }
+
+    /* =========================
+       CONTACT
+    ========================== */
+
+    .contact {
+        text-align: center;
+    }
+
+    .contact-card {
+        padding: 70px 30px;
+        border-radius: 40px;
+
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(25px);
+
+        border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .contact h2 {
+        font-size: clamp(40px, 7vw, 75px);
+        margin-bottom: 20px;
+    }
+
+    .contact p {
+        color: #aaa;
+        margin-bottom: 30px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================== */
+
+    footer {
+        text-align: center;
+        padding: 40px;
+        color: #777;
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @media(max-width: 800px) {
+
+        nav ul {
+            display: none;
+        }
+
+        .about {
+            grid-template-columns: 1fr;
+        }
+
+        .projects {
+            grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+            font-size: 65px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- LIQUID BACKGROUND -->
+<div class="background">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+</div>
+
+
+<!-- NAVIGATION -->
+<nav>
+
+    <div class="logo">
+        G<span>.</span>
+    </div>
+
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+
+</nav>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="tag">
+            ✦ Creative Developer
+        </div>
+
+        <h1>
+            Hello,<br>
+            I'm Greeshma.
+        </h1>
+
+        <p>
+            I create interactive digital experiences,
+            beautiful websites and experimental interfaces
+            where technology meets creativity.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#projects" class="btn primary">
+                Explore My Work →
+            </a>
+
+            <a href="#contact" class="btn">
+                Let's Talk
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+<section id="about">
+
+    <div class="section-title">
+        <small>01 — About Me</small>
+        <h2>A little about me.</h2>
+    </div>
+
+    <div class="about">
+
+        <div class="about-text">
+
+            <p>
+                I'm a passionate developer who enjoys turning
+                ideas into interactive digital experiences.
+            </p>
+
+            <p>
+                I love experimenting with modern UI styles,
+                animations, artificial intelligence and
+                creative web technologies.
+            </p>
+
+            <p>
+                When I'm not coding, you'll probably find me
+                exploring new technologies and coming up with
+                strange ideas for my next project.
+            </p>
+
+        </div>
+
+        <div class="liquid-card">
+
+            <div class="stats">
+
+                <div class="stat">
+                    <h3>12+</h3>
+                    <p>Projects</p>
+                </div>
+
+                <div class="stat">
+                    <h3>8+</h3>
+                    <p>Technologies</p>
+                </div>
+
+                <div class="stat">
+                    <h3>2+</h3>
+                    <p>Years Learning</p>
+                </div>
+
+                <div class="stat">
+                    <h3>∞</h3>
+                    <p>Ideas</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PROJECTS -->
+<section id="projects">
+
+    <div class="section-title">
+        <small>02 — Projects</small>
+        <h2>Things I've built.</h2>
+    </div>
+
+    <div class="projects">
+
+        <!-- PROJECT 1 -->
+
+        <div class="project">
+
+            <span class="project-number">
+                01
+            </span>
+
+            <h3>AI Character Hub</h3>
+
+            <p>
+                An interactive platform where users can
+                talk with different AI personalities and
+                fictional characters.
+            </p>
+
+            <div class="project-tags">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>AI</span>
+            </div>
+
+        </div>
+
+
+        <!-- PROJECT 2 -->
+
+        <div class="project">
+
+            <span class="project-number">
+                02
+            </span>
+
+            <h3>StudyFlow</h3>
+
+            <p>
+                A productivity dashboard designed for
+                students to manage assignments, tasks
+                and study sessions.
+            </p>
+
+            <div class="project-tags">
+                <span>JavaScript</span>
+                <span>UI/UX</span>
+                <span>LocalStorage</span>
+            </div>
+
+        </div>
+
+
+        <!-- PROJECT 3 -->
+
+        <div class="project">
+
+            <span class="project-number">
+                03
+            </span>
+
+            <h3>MovieVerse</h3>
+
+            <p>
+                A cinematic movie discovery website with
+                searchable movies, ratings and personalized
+                recommendations.
+            </p>
+
+            <div class="project-tags">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>API</span>
+            </div>
+
+        </div>
+
+
+        <!-- PROJECT 4 -->
+
+        <div class="project">
+
+            <span class="project-number">
+                04
+            </span>
+
+            <h3>Neon Notes</h3>
+
+            <p>
+                A futuristic note-taking application with
+                colorful themes, categories and smooth
+                animations.
+            </p>
+
+            <div class="project-tags">
+                <span>JavaScript</span>
+                <span>CSS</span>
+                <span>UI</span>
+            </div>
+
+        </div>
+
+
+        <!-- PROJECT 5 -->
+
+        <div class="project">
+
+            <span class="project-number">
+                05
+            </span>
+
+            <h3>WeatherSphere</h3>
+
+            <p>
+                A minimal weather application that displays
+                real-time weather information through an
+                external API.
+            </p>
+
+            <div class="project-tags">
+                <span>API</span>
+                <span>JavaScript</span>
+                <span>Responsive</span>
+            </div>
+
+        </div>
+
+
+        <!-- PROJECT 6 -->
+
+        <div class="project">
+
+            <span class="project-number">
+                06
+            </span>
+
+            <h3>Pixel Playground</h3>
+
+            <p>
+                A collection of interactive browser-based
+                experiments, animations and creative coding
+                projects.
+            </p>
+
+            <div class="project-tags">
+                <span>Canvas</span>
+                <span>JavaScript</span>
+                <span>Animation</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SKILLS -->
+<section id="skills">
+
+    <div class="section-title">
+        <small>03 — Skills</small>
+        <h2>What I work with.</h2>
+    </div>
+
+    <div class="liquid-card">
+
+        <div class="skills">
+
+            <div class="skill">HTML</div>
+            <div class="skill">CSS</div>
+            <div class="skill">JavaScript</div>
+            <div class="skill">C</div>
+            <div class="skill">Python</div>
+            <div class="skill">Git</div>
+            <div class="skill">GitHub</div>
+            <div class="skill">UI/UX</div>
+            <div class="skill">Web Design</div>
+            <div class="skill">AI</div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact">
+
+    <div class="contact">
+
+        <div class="contact-card">
+
+            <h2>
+                Let's create<br>
+                something cool.
+            </h2>
+
+            <p>
+                Have an idea, project or crazy experiment?
+                Let's build it together.
+            </p>
+
+            <a
+                href="mailto:hello@example.com"
+                class="btn primary"
+            >
+                Say Hello →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+    © 2026 Greeshma · Built with HTML & CSS
+
+</footer>
+
+
+</body>
+</html>
